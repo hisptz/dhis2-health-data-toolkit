@@ -1,38 +1,20 @@
 import React from "react";
-import i18n from "@dhis2/d2-i18n";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./HomePage";
+import SummaryPage from "./SummaryPage";
 import classes from "./App.module.css";
-import { useDataQuery } from "@dhis2/app-runtime";
 
-const query = {
-	me: {
-		resource: "me"
-	}
+const App: React.FC = () => {
+    return (
+        <Router>
+            <div className={classes.app}>
+                <Routes>
+                    <Route path="/summary" element={<SummaryPage />} />
+                    <Route path="/" element={<HomePage />} />
+                </Routes>
+            </div>
+        </Router>
+    );
 };
 
-
-interface QueryResponse {
-	me: {
-		name: string;
-	};
-}
-
-const MyApp = () => {
-	const { error, data, loading } = useDataQuery<QueryResponse>(query);
-	if (error) return <span>ERROR</span>;
-	if (loading) return <span>...</span>;
-
-	const name = data?.me.name;
-
-	return (
-		<div className={classes.container}>
-			<>
-				<h1>
-					{i18n.t("Hello {{name}}", { name })}
-				</h1>
-				<h3>{i18n.t("Welcome to DHIS2!")}</h3>
-			</>
-		</div>
-	);
-};
-
-export default MyApp;
+export default App;
